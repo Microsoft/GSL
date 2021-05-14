@@ -16,7 +16,7 @@
 
 #include <gtest/gtest.h>
 
-#include <gsl/assert>  // for Expects, fail_fast (ptr only)
+#include <gsl/assert>  // for contracts, fail_fast (ptr only)
 #include <gsl/pointers>    // for owner
 #include <gsl/span>        // for span, dynamic_extent
 #include <gsl/string_span> // for basic_string_span, operator==, ensure_z
@@ -82,7 +82,7 @@ void use(basic_string_span<T, gsl::dynamic_extent>)
 
 czstring_span<> CreateTempName(string_span<> span)
 {
-    Expects(span.size() > 1);
+    Expects(span.size() > 1, Testing);
 
     std::size_t last = 0;
     if (span.size() > 4) {
@@ -99,7 +99,7 @@ czstring_span<> CreateTempName(string_span<> span)
 
 cwzstring_span<> CreateTempNameW(wstring_span<> span)
 {
-    Expects(span.size() > 1);
+    Expects(span.size() > 1, Testing);
 
     std::size_t last = 0;
     if (span.size() > 4) {
@@ -116,7 +116,7 @@ cwzstring_span<> CreateTempNameW(wstring_span<> span)
 
 cu16zstring_span<> CreateTempNameU16(u16string_span<> span)
 {
-    Expects(span.size() > 1);
+    Expects(span.size() > 1, Testing);
 
     std::size_t last = 0;
     if (span.size() > 4) {
@@ -133,7 +133,7 @@ cu16zstring_span<> CreateTempNameU16(u16string_span<> span)
 
 cu32zstring_span<> CreateTempNameU32(u32string_span<> span)
 {
-    Expects(span.size() > 1);
+    Expects(span.size() > 1, Testing);
 
     std::size_t last = 0;
     if (span.size() > 4) {

@@ -16,7 +16,7 @@
 
 #ifndef GSL_NARROW_H
 #define GSL_NARROW_H
-#include <gsl/assert> // for Expects
+#include <gsl/assert> // for contracts
 #include <gsl/util>   // for narrow_cast
 namespace gsl
 {

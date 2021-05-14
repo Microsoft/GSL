@@ -17,7 +17,7 @@
 #ifndef GSL_POINTERS_H
 #define GSL_POINTERS_H
 
-#include <gsl/assert> // for Ensures, Expects
+#include <gsl/assert>   // for contracts
 
 #include <algorithm>    // for forward
 #include <cstddef>      // for ptrdiff_t, nullptr_t, size_t
@@ -82,13 +82,13 @@ public:
     template <typename U, typename = std::enable_if_t<std::is_convertible<U, T>::value>>
     constexpr not_null(U&& u) : ptr_(std::forward<U>(u))
     {
-        Expects(ptr_ != nullptr);
+        Expects(ptr_ != nullptr, Null);
     }
 
     template <typename = std::enable_if_t<!std::is_same<std::nullptr_t, T>::value>>
     constexpr not_null(T u) : ptr_(std::move(u))
     {
-        Expects(ptr_ != nullptr);
+        Expects(ptr_ != nullptr, Null);
     }
 
     template <typename U, typename = std::enable_if_t<std::is_convertible<U, T>::value>>
@@ -99,7 +99,7 @@ public:
     not_null& operator=(const not_null& other) = default;
     constexpr std::conditional_t<std::is_copy_constructible<T>::value, T, const T&> get() const
     {
-        Ensures(ptr_ != nullptr);
+        Ensures(ptr_ != nullptr, Null);
         return ptr_;
     }
 

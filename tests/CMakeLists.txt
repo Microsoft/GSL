@@ -95,6 +95,7 @@ if(MSVC) # MSVC or simulating MSVC
           -Wno-shift-sign-overflow # GTest gtest-port.h
           -Wno-undef # GTest
           -Wno-used-but-marked-unused # GTest EXPECT_DEATH
+          -Wno-global-constructors
           $<$<EQUAL:${GSL_CXX_STANDARD},14>: # no support for [[maybe_unused]]
             -Wno-unused-member-function
             -Wno-unused-variable
@@ -126,6 +127,7 @@ else()
           -Wno-unknown-attributes
           -Wno-used-but-marked-unused # GTest EXPECT_DEATH
           -Wno-weak-vtables
+          -Wno-global-constructors
           $<$<EQUAL:${GSL_CXX_STANDARD},14>: # no support for [[maybe_unused]]
             -Wno-unused-member-function
             -Wno-unused-variable
@@ -147,7 +149,8 @@ else()
           $<$<NOT:$<VERSION_LESS:$<CXX_COMPILER_VERSION>,6>>:
             -Wduplicated-cond # duplicated if-else conditions
             -Wmisleading-indentation
-            -Wnull-dereference
+            -Wno-null-dereference
+            -Wno-array-bounds
             $<$<EQUAL:${GSL_CXX_STANDARD},14>: # no support for [[maybe_unused]]
               -Wno-unused-variable
             >
@@ -217,6 +220,7 @@ if(MSVC) # MSVC or simulating MSVC
           -Wno-c++98-compat-pedantic
           -Wno-missing-prototypes
           -Wno-unknown-attributes
+          -Wno-global-constructors
         >
     )
 else()
@@ -239,6 +243,7 @@ else()
           -Wno-missing-prototypes
           -Wno-unknown-attributes
           -Wno-weak-vtables
+          -Wno-global-constructors
         >
         $<$<CXX_COMPILER_ID:GNU>:
           -Wdouble-promotion # float implicit to double
@@ -247,7 +252,8 @@ else()
           $<$<NOT:$<VERSION_LESS:$<CXX_COMPILER_VERSION>,6>>:
             -Wduplicated-cond # duplicated if-else conditions
             -Wmisleading-indentation
-            -Wnull-dereference
+            -Wno-null-dereference
+            -Wno-array-bounds
           >
           $<$<NOT:$<VERSION_LESS:$<CXX_COMPILER_VERSION>,7>>:
             -Wduplicated-branches # identical if-else branches

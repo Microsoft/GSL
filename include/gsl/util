@@ -17,7 +17,7 @@
 #ifndef GSL_UTIL_H
 #define GSL_UTIL_H
 
-#include <gsl/assert> // for Expects
+#include <gsl/assert>       // for contracts
 
 #include <array>
 #include <cstddef>          // for ptrdiff_t, size_t
@@ -108,7 +108,7 @@ GSL_SUPPRESS(bounds.2) // NO-FORMAT: attribute
 // clang-format on
     constexpr T& at(T (&arr)[N], const index i)
 {
-    Expects(i >= 0 && i < narrow_cast<index>(N));
+    Expects(i >= 0 && i < narrow_cast<index>(N), Bounds);
     return arr[narrow_cast<std::size_t>(i)];
 }
 
@@ -119,7 +119,7 @@ GSL_SUPPRESS(bounds.2) // NO-FORMAT: attribute
 // clang-format on
     constexpr auto at(Cont& cont, const index i) -> decltype(cont[cont.size()])
 {
-    Expects(i >= 0 && i < narrow_cast<index>(cont.size()));
+    Expects(i >= 0 && i < narrow_cast<index>(cont.size()), Bounds);
     using size_type = decltype(cont.size());
     return cont[narrow_cast<size_type>(i)];
 }
@@ -130,7 +130,7 @@ GSL_SUPPRESS(bounds.1) // NO-FORMAT: attribute
 // clang-format on
 constexpr T at(const std::initializer_list<T> cont, const index i)
 {
-    Expects(i >= 0 && i < narrow_cast<index>(cont.size()));
+    Expects(i >= 0 && i < narrow_cast<index>(cont.size()), Bounds);
     return *(cont.begin() + i);
 }
 

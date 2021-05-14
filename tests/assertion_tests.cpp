@@ -15,7 +15,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <gtest/gtest.h>
-#include <gsl/assert> // for fail_fast (ptr only), Ensures, Expects
+#include <gsl/assert> // for fail_fast (ptr only), contracts
 
 using namespace gsl;
 
@@ -25,14 +25,14 @@ static constexpr char deathstring[] = "Expected Death";
 
 int f(int i)
 {
-    Expects(i > 0 && i < 10);
+    Expects(i > 0 && i < 10, Testing);
     return i;
 }
 
 int g(int i)
 {
     i++;
-    Ensures(i > 0 && i < 10);
+    Ensures(i > 0 && i < 10, Testing);
     return i;
 }
 } // namespace

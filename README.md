@@ -44,8 +44,8 @@ shared_ptr                         | &#x2611;   | an alias to `std::shared_ptr`
 stack_array                        | &#x2610;   | a stack-allocated array
 dyn_array                          | &#x2610;   | a heap-allocated array
 [**3. Assertions**][cg-assertions] |            |
-Expects                            | &#x2611;   | a precondition assertion; on failure it terminates
-Ensures                            | &#x2611;   | a postcondition assertion; on failure it terminates
+Expects                            | &#x2611;   | a precondition assertion; on failure it terminates by default if no user-installed handler
+Ensures                            | &#x2611;   | a postcondition assertion; on failure it terminates by default if no user-installed handler
 [**4. Utilities**][cg-utilities]   |            |
 move_owner                         | &#x2610;   | a helper function that moves one `owner` to the other
 byte                               | &#x2611;   | either an alias to std::byte or a byte type

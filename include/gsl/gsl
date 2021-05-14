@@ -18,7 +18,7 @@
 #define GSL_GSL_H
 
 #include <gsl/algorithm>   // copy
-#include <gsl/assert>      // Ensures/Expects
+#include <gsl/assert>      // contracts
 #include <gsl/byte>        // byte
 #include <gsl/pointers>    // owner, not_null
 #include <gsl/span>        // span

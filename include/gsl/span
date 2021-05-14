@@ -17,7 +17,7 @@
 #ifndef GSL_SPAN_H
 #define GSL_SPAN_H
 
-#include <gsl/assert> // for Expects
+#include <gsl/assert> // for contracts
 #include <gsl/byte>   // for byte
 #include <gsl/util>   // for narrow_cast
 
@@ -29,7 +29,7 @@
 #if defined(_MSC_VER) && !defined(__clang__)
 #pragma warning(push)
 
-// turn off some warnings that are noisy about our Expects statements
+// turn off some warnings that are noisy about our contract checks
 #pragma warning(disable : 4127) // conditional expression is constant
 #pragma warning(                                                                                   \
     disable : 4146) // unary minus operator applied to unsigned type, result still unsigned
@@ -137,21 +137,21 @@ namespace details
 
         constexpr reference operator*() const noexcept
         {
-            Expects(begin_ && end_);
-            Expects(begin_ <= current_ && current_ < end_);
+            Expects(begin_ && end_, Bounds);
+            Expects(begin_ <= current_ && current_ < end_, Bounds);
             return *current_;
         }
 
         constexpr pointer operator->() const noexcept
         {
-            Expects(begin_ && end_);
-            Expects(begin_ <= current_ && current_ < end_);
+            Expects(begin_ && end_, Bounds);
+            Expects(begin_ <= current_ && current_ < end_, Bounds);
             return current_;
         }
         constexpr span_iterator& operator++() noexcept
         {
-            Expects(begin_ && current_ && end_);
-            Expects(current_ < end_);
+            Expects(begin_ && current_ && end_, Bounds);
+            Expects(current_ < end_, Bounds);
             // clang-format off
             GSL_SUPPRESS(bounds.1) // NO-FORMAT: attribute
             // clang-format on
@@ -168,8 +168,8 @@ namespace details
 
         constexpr span_iterator& operator--() noexcept
         {
-            Expects(begin_ && end_);
-            Expects(begin_ < current_);
+            Expects(begin_ && end_, Bounds);
+            Expects(begin_ < current_, Bounds);
             --current_;
             return *this;
         }
@@ -183,9 +183,9 @@ namespace details
 
         constexpr span_iterator& operator+=(const difference_type n) noexcept
         {
-            if (n != 0) Expects(begin_ && current_ && end_);
-            if (n > 0) Expects(end_ - current_ >= n);
-            if (n < 0) Expects(current_ - begin_ >= -n);
+            if (n != 0) Expects(begin_ && current_ && end_, Bounds);
+            if (n > 0) Expects(end_ - current_ >= n, Bounds);
+            if (n < 0) Expects(current_ - begin_ >= -n, Bounds);
             // clang-format off
             GSL_SUPPRESS(bounds.1) // NO-FORMAT: attribute
             // clang-format on
@@ -208,9 +208,9 @@ namespace details
 
         constexpr span_iterator& operator-=(const difference_type n) noexcept
         {
-            if (n != 0) Expects(begin_ && current_ && end_);
-            if (n > 0) Expects(current_ - begin_ >= n);
-            if (n < 0) Expects(end_ - current_ >= -n);
+            if (n != 0) Expects(begin_ && current_ && end_, Bounds);
+            if (n > 0) Expects(current_ - begin_ >= n, Bounds);
+            if (n < 0) Expects(end_ - current_ >= -n, Bounds);
             current_ -= n;
             return *this;
         }
@@ -227,7 +227,7 @@ namespace details
             std::enable_if_t<std::is_same<std::remove_cv_t<Type2>, value_type>::value, int> = 0>
         constexpr difference_type operator-(const span_iterator<Type2>& rhs) const noexcept
         {
-            Expects(begin_ == rhs.begin_ && end_ == rhs.end_);
+            Expects(begin_ == rhs.begin_ && end_ == rhs.end_, Bounds);
             return current_ - rhs.current_;
         }
 
@@ -241,7 +241,7 @@ namespace details
             std::enable_if_t<std::is_same<std::remove_cv_t<Type2>, value_type>::value, int> = 0>
         constexpr bool operator==(const span_iterator<Type2>& rhs) const noexcept
         {
-            Expects(begin_ == rhs.begin_ && end_ == rhs.end_);
+            Expects(begin_ == rhs.begin_ && end_ == rhs.end_, Bounds);
             return current_ == rhs.current_;
         }
 
@@ -258,7 +258,7 @@ namespace details
             std::enable_if_t<std::is_same<std::remove_cv_t<Type2>, value_type>::value, int> = 0>
         constexpr bool operator<(const span_iterator<Type2>& rhs) const noexcept
         {
-            Expects(begin_ == rhs.begin_ && end_ == rhs.end_);
+            Expects(begin_ == rhs.begin_ && end_ == rhs.end_, Bounds);
             return current_ < rhs.current_;
         }
 
@@ -294,14 +294,14 @@ namespace details
         { // test that [lhs, rhs) forms a valid range inside an STL algorithm
             Expects(lhs.begin_ == rhs.begin_ // range spans have to match
                     && lhs.end_ == rhs.end_ &&
-                    lhs.current_ <= rhs.current_); // range must not be transposed
+                    lhs.current_ <= rhs.current_, Bounds); // range must not be transposed
         }
 
         constexpr void _Verify_offset(const difference_type n) const noexcept
         { // test that *this + n is within the range of this call
-            if (n != 0) Expects(begin_ && current_ && end_);
-            if (n > 0) Expects(end_ - current_ >= n);
-            if (n < 0) Expects(current_ - begin_ >= -n);
+            if (n != 0) Expects(begin_ && current_ && end_, Bounds);
+            if (n > 0) Expects(end_ - current_ >= n, Bounds);
+            if (n < 0) Expects(current_ - begin_ >= -n, Bounds);
         }
 
         // clang-format off
@@ -346,7 +346,7 @@ namespace details
 
         constexpr explicit extent_type(extent_type<dynamic_extent>);
 
-        constexpr explicit extent_type(size_type size) { Expects(size == Ext); }
+        constexpr explicit extent_type(size_type size) { Expects(size == Ext, Bounds); }
 
         constexpr size_type size() const noexcept { return Ext; }
 
@@ -370,7 +370,7 @@ namespace details
 
         constexpr explicit extent_type(size_type size) : size_(size)
         {
-            Expects(size != dynamic_extent);
+            Expects(size != dynamic_extent, Bounds);
         }
 
         constexpr size_type size() const noexcept { return size_; }
@@ -382,7 +382,7 @@ namespace details
     template <std::size_t Ext>
     constexpr extent_type<Ext>::extent_type(extent_type<dynamic_extent> ext)
     {
-        Expects(ext.size() == Ext);
+        Expects(ext.size() == Ext, Bounds);
     }
 
     template <class ElementType, std::size_t Extent, std::size_t Offset, std::size_t Count>
@@ -431,7 +431,7 @@ public:
     template <std::size_t MyExtent = Extent, std::enable_if_t<MyExtent != dynamic_extent, int> = 0>
     constexpr explicit span(pointer ptr, size_type count) noexcept : storage_(ptr, count)
     {
-        Expects(count == Extent);
+        Expects(count == Extent, Bounds);
     }
 
     template <std::size_t MyExtent = Extent, std::enable_if_t<MyExtent == dynamic_extent, int> = 0>
@@ -442,7 +442,7 @@ public:
     constexpr explicit span(pointer firstElem, pointer lastElem) noexcept
         : storage_(firstElem, narrow_cast<std::size_t>(lastElem - firstElem))
     {
-        Expects(lastElem - firstElem == static_cast<difference_type>(Extent));
+        Expects(lastElem - firstElem == static_cast<difference_type>(Extent), Bounds);
     }
 
     template <std::size_t MyExtent = Extent, std::enable_if_t<MyExtent == dynamic_extent, int> = 0>
@@ -553,7 +553,7 @@ public:
     template <std::size_t Count>
     constexpr span<element_type, Count> first() const noexcept
     {
-        Expects(Count <= size());
+        Expects(Count <= size(), Bounds);
         return span<element_type, Count>{data(), Count};
     }
 
@@ -563,7 +563,7 @@ public:
         // clang-format on
         constexpr span<element_type, Count> last() const noexcept
     {
-        Expects(Count <= size());
+        Expects(Count <= size(), Bounds);
         return span<element_type, Count>{data() + (size() - Count), Count};
     }
 
@@ -574,7 +574,7 @@ public:
         constexpr auto subspan() const noexcept ->
         typename details::calculate_subspan_type<ElementType, Extent, Offset, Count>::type
     {
-        Expects((size() >= Offset) && (Count == dynamic_extent || (Count <= size() - Offset)));
+        Expects((size() >= Offset) && (Count == dynamic_extent || (Count <= size() - Offset)), Bounds);
         using type =
             typename details::calculate_subspan_type<ElementType, Extent, Offset, Count>::type;
         return type{data() + Offset, Count == dynamic_extent ? size() - Offset : Count};
@@ -582,13 +582,13 @@ public:
 
     constexpr span<element_type, dynamic_extent> first(size_type count) const noexcept
     {
-        Expects(count <= size());
+        Expects(count <= size(), Bounds);
         return {data(), count};
     }
 
     constexpr span<element_type, dynamic_extent> last(size_type count) const noexcept
     {
-        Expects(count <= size());
+        Expects(count <= size(), Bounds);
         return make_subspan(size() - count, dynamic_extent, subspan_selector<Extent>{});
     }
 
@@ -603,7 +603,7 @@ public:
 
     constexpr size_type size_bytes() const noexcept
     {
-        Expects(size() < dynamic_extent / sizeof(element_type));
+        Expects(size() < dynamic_extent / sizeof(element_type), Bounds);
         return size() * sizeof(element_type);
     }
 
@@ -615,19 +615,19 @@ public:
     // clang-format on
     constexpr reference operator[](size_type idx) const noexcept
     {
-        Expects(idx < size());
+        Expects(idx < size(), Bounds);
         return data()[idx];
     }
 
     constexpr reference front() const noexcept
     {
-        Expects(size() > 0);
+        Expects(size() > 0, Bounds);
         return data()[0];
     }
 
     constexpr reference back() const noexcept
     {
-        Expects(size() > 0);
+        Expects(size() > 0, Bounds);
         return data()[size() - 1];
     }
 
@@ -688,14 +688,14 @@ private:
         constexpr storage_type(KnownNotNull data, OtherExtentType ext)
             : ExtentType(ext), data_(data.p)
         {
-            Expects(ExtentType::size() != dynamic_extent);
+            Expects(ExtentType::size() != dynamic_extent, Bounds);
         }
 
         template <class OtherExtentType>
         constexpr storage_type(pointer data, OtherExtentType ext) : ExtentType(ext), data_(data)
         {
-            Expects(ExtentType::size() != dynamic_extent);
-            Expects(data || ExtentType::size() == 0);
+            Expects(ExtentType::size() != dynamic_extent, Bounds);
+            Expects(data || ExtentType::size() == 0, Bounds);
         }
 
         constexpr pointer data() const noexcept { return data_; }
@@ -729,11 +729,11 @@ private:
     constexpr span<element_type, dynamic_extent>
     make_subspan(size_type offset, size_type count, subspan_selector<dynamic_extent>) const noexcept
     {
-        Expects(size() >= offset);
+        Expects(size() >= offset, Bounds);
 
         if (count == dynamic_extent) { return {KnownNotNull{data() + offset}, size() - offset}; }
 
-        Expects(size() - offset >= count);
+        Expects(size() - offset >= count, Bounds);
         return {KnownNotNull{data() + offset}, count};
     }
 };

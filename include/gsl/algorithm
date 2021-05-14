@@ -17,7 +17,7 @@
 #ifndef GSL_ALGORITHM_H
 #define GSL_ALGORITHM_H
 
-#include <gsl/assert> // for Expects
+#include <gsl/assert> // for contracts
 #include <gsl/span>   // for dynamic_extent, span
 
 #include <algorithm>   // for copy_n
@@ -27,7 +27,7 @@
 #ifdef _MSC_VER
 #pragma warning(push)
 
-// turn off some warnings that are noisy about our Expects statements
+// turn off some warnings that are noisy about our contract checks
 #pragma warning(disable : 4127) // conditional expression is constant
 #pragma warning(disable : 4996) // unsafe use of std::copy_n
 
@@ -47,7 +47,7 @@ void copy(span<SrcElementType, SrcExtent> src, span<DestElementType, DestExtent>
                       (SrcExtent <= DestExtent),
                   "Source range is longer than target range");
 
-    Expects(dest.size() >= src.size());
+    Expects(dest.size() >= src.size(), Bounds);
     // clang-format off
     GSL_SUPPRESS(stl.1) // NO-FORMAT: attribute
     // clang-format on

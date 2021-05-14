@@ -17,7 +17,7 @@
 #ifndef GSL_STRING_SPAN_H
 #define GSL_STRING_SPAN_H
 
-#include <gsl/assert>   // for Ensures, Expects
+#include <gsl/assert>   // for contracts
 #include <gsl/span_ext> // for operator!=, operator==, dynamic_extent
 #include <gsl/util>     // for narrow_cast
 
@@ -114,19 +114,19 @@ template <typename T, const T Sentinel>
              "isocpp/CppCoreGuidelines PR#1680")]] constexpr span<T, dynamic_extent>
 ensure_sentinel(T* seq, std::size_t max = static_cast<std::size_t>(-1))
 {
-    Ensures(seq != nullptr);
+    Ensures(seq != nullptr, Null);
 
     // clang-format off
     GSL_SUPPRESS(f.23) // TODO: false positive // TODO: suppress does not work
     // clang-format on
     auto cur = seq;
-    Ensures(cur != nullptr); // workaround for removing the warning
+    Ensures(cur != nullptr, Null); // workaround for removing the warning
 
     // clang-format off
     GSL_SUPPRESS(bounds.1) // TODO: suppress does not work
     // clang-format on
     while (static_cast<std::size_t>(cur - seq) < max && *cur != Sentinel) ++cur;
-    Ensures(*cur == Sentinel);
+    Ensures(*cur == Sentinel, Bounds);
     return {seq, static_cast<std::size_t>(cur - seq)};
 }
 
@@ -437,8 +437,8 @@ public:
     constexpr basic_zstring_span(impl_type s) : span_(s)
     {
         // expects a zero-terminated span
-        Expects(s.size() > 0);
-        Expects(s[s.size() - 1] == value_type{});
+        Expects(s.size() > 0, Bounds);
+        Expects(s[s.size() - 1] == value_type{}, Bounds);
     }
 
     // copy
