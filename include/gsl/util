@@ -88,10 +88,36 @@ finally(F&& f) noexcept
         std::forward<F>(f));
 }
 
+namespace details
+{
+
+    template <class T, class U>
+    constexpr bool FloatingPointToUnsignedConversion =
+        std::is_floating_point<typename std::decay<U>::type>::value&& std::is_integral<T>::value&&
+            std::is_unsigned<T>::value;
+
+} // namespace details
+
 // narrow_cast(): a searchable way to do narrowing casts of values
-template <class T, class U>
+
+// floating point to unsigned values can have unpredictable conversions across various
+// architectures and build configurations when the floating value is negative.
+// To force a consistent behavior the float should first cast to signed and then to unsigned.
+template <class T, class U,
+          std::enable_if_t<details::FloatingPointToUnsignedConversion<T, U>, int> = 0>
 // clang-format off
-GSL_SUPPRESS(type.1) // NO-FORMAT: attribute
+GSL_SUPPRESS(type.1)
+// clang-format on
+constexpr T narrow_cast(U&& u) noexcept
+{
+    using signed_type = typename std::make_signed<T>::type;
+    return static_cast<T>(static_cast<signed_type>(std::forward<U>(u)));
+}
+
+template <class T, class U,
+          std::enable_if_t<!details::FloatingPointToUnsignedConversion<T, U>, int> = 0>
+// clang-format off
+GSL_SUPPRESS(type.1)
 // clang-format on
 constexpr T narrow_cast(U&& u) noexcept
 {
@@ -106,7 +132,7 @@ template <class T, std::size_t N>
 GSL_SUPPRESS(bounds.4) // NO-FORMAT: attribute
 GSL_SUPPRESS(bounds.2) // NO-FORMAT: attribute
 // clang-format on
-    constexpr T& at(T (&arr)[N], const index i)
+constexpr T& at(T (&arr)[N], const index i)
 {
     Expects(i >= 0 && i < narrow_cast<index>(N));
     return arr[narrow_cast<std::size_t>(i)];
@@ -117,7 +143,7 @@ template <class Cont>
 GSL_SUPPRESS(bounds.4) // NO-FORMAT: attribute
 GSL_SUPPRESS(bounds.2) // NO-FORMAT: attribute
 // clang-format on
-    constexpr auto at(Cont& cont, const index i) -> decltype(cont[cont.size()])
+constexpr auto at(Cont& cont, const index i) -> decltype(cont[cont.size()])
 {
     Expects(i >= 0 && i < narrow_cast<index>(cont.size()));
     using size_type = decltype(cont.size());
