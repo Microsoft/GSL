@@ -25,6 +25,7 @@
 #include <cstddef>      // for ptrdiff_t, size_t, nullptr_t
 #include <gsl/span_ext> // for span specialization of gsl::at and other span-related extensions
 #include <iterator>     // for reverse_iterator, distance, random_access_...
+#include <string>       // for basic_string
 #include <type_traits>  // for enable_if_t, declval, is_convertible, inte...
 
 #if defined(_MSC_VER) && !defined(__clang__)
@@ -91,6 +92,21 @@ namespace details
 
     template <class T>
     struct is_std_array : is_std_array_oracle<std::remove_cv_t<T>>
+    {
+    };
+
+    template <class T>
+    struct is_std_string_oracle : std::false_type
+    {
+    };
+
+    template <class CharT, class Traits, class Allocator>
+    struct is_std_string_oracle<std::basic_string<CharT, Traits, Allocator>> : std::true_type
+    {
+    };
+
+    template <class T>
+    struct is_std_string : is_std_string_oracle<std::remove_cv_t<T>>
     {
     };
 
@@ -469,12 +485,30 @@ public:
         : storage_(KnownNotNull{arr.data()}, details::extent_type<N>())
     {}
 
+    template <std::size_t MyExtent = Extent,
+              class CharT, class Traits, class Allocator,
+              std::enable_if_t<
+                  MyExtent != dynamic_extent &&
+                      details::is_allowed_element_type_conversion<CharT, element_type>::value,
+                  int> = 0>
+    constexpr explicit span(std::basic_string<CharT, Traits, Allocator>& str) noexcept : span(&str[0], str.size())
+    {}
+
+    template <std::size_t MyExtent = Extent,
+              class CharT, class Traits, class Allocator,
+              std::enable_if_t<
+                  MyExtent == dynamic_extent &&
+                      details::is_allowed_element_type_conversion<CharT, element_type>::value,
+                  int> = 0>
+    constexpr span(std::basic_string<CharT, Traits, Allocator>& str) noexcept : span(&str[0], str.size())
+    {}
+
     // NB: the SFINAE on these constructors uses .data() as an incomplete/imperfect proxy for the
     // requirement on Container to be a contiguous sequence container.
     template <std::size_t MyExtent = Extent, class Container,
               std::enable_if_t<
                   MyExtent != dynamic_extent && !details::is_span<Container>::value &&
-                      !details::is_std_array<Container>::value &&
+                      !details::is_std_array<Container>::value && !details::is_std_string<Container>::value &&
                       std::is_pointer<decltype(std::declval<Container&>().data())>::value &&
                       std::is_convertible<
                           std::remove_pointer_t<decltype(std::declval<Container&>().data())> (*)[],
@@ -486,7 +520,7 @@ public:
     template <std::size_t MyExtent = Extent, class Container,
               std::enable_if_t<
                   MyExtent == dynamic_extent && !details::is_span<Container>::value &&
-                      !details::is_std_array<Container>::value &&
+                      !details::is_std_array<Container>::value && !details::is_std_string<Container>::value &&
                       std::is_pointer<decltype(std::declval<Container&>().data())>::value &&
                       std::is_convertible<
                           std::remove_pointer_t<decltype(std::declval<Container&>().data())> (*)[],

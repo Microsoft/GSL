@@ -575,11 +575,9 @@ TEST(span_test, from_container_constructor)
     const std::string cstr = "hello";
 
     {
-#ifdef CONFIRM_COMPILATION_ERRORS
         span<char> s{str};
         EXPECT_TRUE(s.size() == str.size());
-         EXPECT_TRUE(s.data() == str.data()));
-#endif
+         EXPECT_TRUE(s.data() == str.data());
          span<const char> cs{str};
          EXPECT_TRUE(cs.size() == str.size());
          EXPECT_TRUE(cs.data() == str.data());
