@@ -1,0 +1,277 @@
+[
+  {
+    "name": "Priority: P0",
+    "color": "b60205",
+    "description": "Critical issue requiring immediate attention"
+  },
+  {
+    "name": "Priority: P1",
+    "color": "d93f0b",
+    "description": "High-priority issue requiring prompt attention"
+  },
+  {
+    "name": "Priority: P2",
+    "color": "fbca04",
+    "description": "Normal-priority issue"
+  },
+  {
+    "name": "Priority: P3",
+    "color": "0e8a16",
+    "description": "Low-priority issue"
+  },
+  {
+    "name": "Kind: Correctness",
+    "color": "d73a4a",
+    "description": "Incorrect behavior or result"
+  },
+  {
+    "name": "Kind: Performance",
+    "color": "fbca04",
+    "description": "Runtime, compile-time, or code-size performance"
+  },
+  {
+    "name": "Kind: Safety",
+    "color": "b60205",
+    "description": "Bounds, lifetime, contracts, or undefined behavior"
+  },
+  {
+    "name": "Kind: Compatibility",
+    "color": "5319e7",
+    "description": "API, compiler, platform, or language-standard compatibility"
+  },
+  {
+    "name": "Kind: Build",
+    "color": "0052cc",
+    "description": "Build system, packaging, tests, or CI infrastructure"
+  },
+  {
+    "name": "Kind: Documentation",
+    "color": "0075ca",
+    "description": "Documentation or examples"
+  },
+  {
+    "name": "Status: Open",
+    "color": "d4c5f9",
+    "description": "Awaiting triage or work"
+  },
+  {
+    "name": "Status: Needs Info",
+    "color": "d876e3",
+    "description": "Additional information is required"
+  },
+  {
+    "name": "Status: Triaged",
+    "color": "0e8a16",
+    "description": "Ready for root-cause analysis"
+  },
+  {
+    "name": "Status: RCA Complete",
+    "color": "1d76db",
+    "description": "Root cause and failing regression test are available"
+  },
+  {
+    "name": "Status: Fix In Progress",
+    "color": "fbca04",
+    "description": "A fix is being implemented"
+  },
+  {
+    "name": "Status: Under Review",
+    "color": "5319e7",
+    "description": "Ready for human review"
+  },
+  {
+    "name": "Status: Blocked",
+    "color": "b60205",
+    "description": "Cannot proceed until a blocker is resolved"
+  },
+  {
+    "name": "Risk: Low",
+    "color": "0e8a16",
+    "description": "Low-risk pull request"
+  },
+  {
+    "name": "Risk: Medium",
+    "color": "fbca04",
+    "description": "Moderate-risk pull request"
+  },
+  {
+    "name": "Risk: High",
+    "color": "d93f0b",
+    "description": "High-risk pull request"
+  },
+  {
+    "name": "Risk: Critical",
+    "color": "b60205",
+    "description": "Critical-risk pull request"
+  },
+  {
+    "name": "Size: XS",
+    "color": "c2e0c6",
+    "description": "Very small pull request"
+  },
+  {
+    "name": "Size: S",
+    "color": "bfdadc",
+    "description": "Small pull request"
+  },
+  {
+    "name": "Size: M",
+    "color": "c5def5",
+    "description": "Medium pull request"
+  },
+  {
+    "name": "Size: L",
+    "color": "1d76db",
+    "description": "Large pull request"
+  },
+  {
+    "name": "Size: XL",
+    "color": "0052cc",
+    "description": "Very large pull request"
+  },
+  {
+    "name": "Review: Agent Reviewed",
+    "color": "0e8a16",
+    "description": "Automated first-pass review is complete"
+  },
+  {
+    "name": "Review: Concerns Found",
+    "color": "b60205",
+    "description": "Automated review found substantial concerns"
+  },
+  {
+    "name": "Human Decision Required",
+    "color": "d876e3",
+    "description": "A maintainer decision is required"
+  },
+  {
+    "name": "Agent: Paused",
+    "color": "000000",
+    "description": "Automated agents must not advance this item"
+  },
+  {
+    "name": "Area: algorithm",
+    "color": "c5def5",
+    "description": "Changes to gsl/algorithm"
+  },
+  {
+    "name": "Area: contracts",
+    "color": "c5def5",
+    "description": "Contracts and assertion behavior"
+  },
+  {
+    "name": "Area: byte",
+    "color": "c5def5",
+    "description": "Changes to gsl/byte"
+  },
+  {
+    "name": "Area: dyn_array",
+    "color": "c5def5",
+    "description": "Changes to gsl/dyn_array"
+  },
+  {
+    "name": "Area: narrow",
+    "color": "c5def5",
+    "description": "Changes to gsl/narrow"
+  },
+  {
+    "name": "Area: pointers",
+    "color": "c5def5",
+    "description": "Changes to gsl/pointers and not_null"
+  },
+  {
+    "name": "Area: span",
+    "color": "c5def5",
+    "description": "Changes to gsl/span and span extensions"
+  },
+  {
+    "name": "Area: util",
+    "color": "c5def5",
+    "description": "Changes to gsl/util"
+  },
+  {
+    "name": "Area: zstring",
+    "color": "c5def5",
+    "description": "Changes to gsl/zstring"
+  },
+  {
+    "name": "Area: build",
+    "color": "bfdadc",
+    "description": "CMake, packaging, or CI"
+  },
+  {
+    "name": "Area: tests",
+    "color": "bfdadc",
+    "description": "Test infrastructure or test-only changes"
+  },
+  {
+    "name": "Area: documentation",
+    "color": "bfdadc",
+    "description": "Documentation and examples"
+  },
+  {
+    "name": "Platform: Windows",
+    "color": "d4c5f9",
+    "description": "Windows-specific behavior"
+  },
+  {
+    "name": "Platform: Linux",
+    "color": "d4c5f9",
+    "description": "Linux-specific behavior"
+  },
+  {
+    "name": "Platform: macOS",
+    "color": "d4c5f9",
+    "description": "macOS-specific behavior"
+  },
+  {
+    "name": "Platform: Android",
+    "color": "d4c5f9",
+    "description": "Android-specific behavior"
+  },
+  {
+    "name": "Platform: iOS",
+    "color": "d4c5f9",
+    "description": "iOS-specific behavior"
+  },
+  {
+    "name": "Compiler: MSVC",
+    "color": "bfd4f2",
+    "description": "Microsoft Visual C++"
+  },
+  {
+    "name": "Compiler: GCC",
+    "color": "bfd4f2",
+    "description": "GNU Compiler Collection"
+  },
+  {
+    "name": "Compiler: Clang",
+    "color": "bfd4f2",
+    "description": "LLVM Clang or ClangCL"
+  },
+  {
+    "name": "Compiler: AppleClang",
+    "color": "bfd4f2",
+    "description": "Apple Clang"
+  },
+  {
+    "name": "Standard: C++14",
+    "color": "fef2c0",
+    "description": "C++14-specific behavior"
+  },
+  {
+    "name": "Standard: C++17",
+    "color": "fef2c0",
+    "description": "C++17-specific behavior"
+  },
+  {
+    "name": "Standard: C++20",
+    "color": "fef2c0",
+    "description": "C++20-specific behavior"
+  },
+  {
+    "name": "Standard: C++23",
+    "color": "fef2c0",
+    "description": "C++23-specific behavior"
+  }
+]

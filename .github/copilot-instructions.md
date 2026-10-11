@@ -76,7 +76,22 @@ correctness, and zero overhead.
   - macOS (AppleClang)
 
 ## Copilot Tasks
-- You can find the CMake artifacts for C++20 in build-cxx20 and C++14 in build-cxx14.
+- Configure, build, and test C++14 with:
+  - `cmake --preset clang-14-debug -DCI_TESTING:BOOL=ON`
+  - `cmake --build --preset clang-14-debug`
+  - `ctest --preset clang-14-debug --output-on-failure`
+- Configure, build, and test C++20 with:
+  - `cmake --preset clang-20-debug -DCI_TESTING:BOOL=ON`
+  - `cmake --build --preset clang-20-debug`
+  - `ctest --preset clang-20-debug --output-on-failure`
+- Agent-created RCA pull requests must contain a failing regression test but no production fix and
+  use `Status: RCA Complete`.
+- Coding agents must continue on the existing RCA pull request and must not weaken its regression
+  test. They move validated pull requests to `Status: Under Review`.
+- Never perform autonomous work while `Agent: Paused` is present. Use `Human Decision Required`
+  when a design, compatibility, or policy decision requires a maintainer.
+- Agent reviews are non-approving first-pass reviews. They classify pull requests by priority, kind,
+  risk, size, and scope before requesting review from `@carsonradtke`.
 - Before publishing a PR, verify the following:
   - There are no compiler warnings or errors when building the test suite.
   - The test suite passes on all supported platforms and compilers.

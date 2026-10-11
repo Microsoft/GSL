@@ -1,1 +1,3 @@
 include/gsl/* linguist-language=C++
+
+.github/workflows/*.lock.yml linguist-generated=true

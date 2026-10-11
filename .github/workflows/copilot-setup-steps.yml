@@ -1,6 +1,13 @@
 name: "Copilot Setup Steps"
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
 
 jobs:
   copilot-setup-steps:
@@ -12,10 +19,10 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Build Dependencies
-        run: sudo apt-get update && sudo apt-get install -y clang cmake make
+        run: sudo apt-get update && sudo apt-get install -y clang cmake git make ninja-build
 
       - name: Configure CMake (C++14)
-        run: cmake --preset clang-14-debug
+        run: cmake --preset clang-14-debug -DCI_TESTING:BOOL=ON
 
       - name: Configure CMake (C++20)
-        run: cmake --preset clang-20-debug
+        run: cmake --preset clang-20-debug -DCI_TESTING:BOOL=ON
